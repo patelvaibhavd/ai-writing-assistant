@@ -67,7 +67,7 @@ services:
   # ===========================================
   # FRONTEND SERVICE (Angular Static Site)
   # ===========================================
-  - type: web
+  - type: static
     name: ai-writing-assistant-frontend
     runtime: static
     plan: free
