@@ -1,0 +1,90 @@
+# ===========================================
+# Render Blueprint - AI Writing Assistant
+# ===========================================
+# This file defines the infrastructure for deploying
+# both frontend and backend services to Render.
+#
+# Usage: 
+# 1. Push this file to your Git repository
+# 2. Go to https://render.com/deploy
+# 3. Connect your repository
+# 4. Render will automatically create the services
+#
+# Documentation: https://render.com/docs/blueprint-spec
+# ===========================================
+
+services:
+  # ===========================================
+  # BACKEND SERVICE (Node.js API)
+  # ===========================================
+  - type: web
+    name: ai-writing-assistant-api
+    runtime: node
+    region: oregon  # Change to your preferred region
+    plan: free      # Options: free, starter, standard, pro
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      # Node Environment
+      - key: NODE_ENV
+        value: production
+      
+      # Server Port (Render automatically sets PORT, but we define it for clarity)
+      - key: PORT
+        value: 3000
+      
+      # ===========================================
+      # AI Provider Configuration
+      # ===========================================
+      # Options: 'demo', 'groq', 'gemini', 'openai'
+      # demo   - No API key needed (basic transformations)
+      # groq   - FREE! Get key at https://console.groq.com
+      # gemini - FREE tier! Get key at https://aistudio.google.com/apikey
+      # openai - Paid, get key at https://platform.openai.com/api-keys
+      - key: AI_PROVIDER
+        value: demo  # Change to 'groq', 'gemini', or 'openai' as needed
+      
+      # ===========================================
+      # API Keys (Set these in Render Dashboard)
+      # ===========================================
+      # sync: false means you need to set these manually in Render Dashboard
+      # Go to: Service > Environment > Add Environment Variable
+      
+      # Groq API Key (FREE - Recommended!)
+      - key: GROQ_API_KEY
+        sync: false
+      
+      # Google Gemini API Key (FREE tier available)
+      - key: GEMINI_API_KEY
+        sync: false
+      
+      # OpenAI API Key (Paid)
+      - key: OPENAI_API_KEY
+        sync: false
+
+  # ===========================================
+  # FRONTEND SERVICE (Angular Static Site)
+  # ===========================================
+  - type: web
+    name: ai-writing-assistant-frontend
+    runtime: static
+    region: oregon  # Should match backend region for lower latency
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build:prod
+    staticPublishPath: dist/ai-writing-assistant/browser
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+    routes:
+      # SPA routing - redirect all routes to index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+

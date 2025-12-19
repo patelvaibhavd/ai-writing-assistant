@@ -1,0 +1,46 @@
+📁 Files Created
+render.yaml - Complete Render Blueprint with both services:
+Backend: Node.js API service (ai-writing-assistant-api)
+Frontend: Angular static site (ai-writing-assistant-frontend)
+🚀 Deployment Steps
+Step 1: Push to Git Repository
+git add .git commit -m "Add Render deployment configuration"git push origin main
+Step 2: Deploy via Render Dashboard
+Go to https://dashboard.render.com
+Click "New +" → "Blueprint"
+Connect your GitHub/GitLab repository
+Select your ai-writing-assistant repository
+Render will auto-detect the render.yaml and show both services
+Click "Apply" to deploy
+Step 3: Configure Environment Variables
+After the initial deployment:
+Go to your Backend service → Environment
+Set the AI provider you want to use:
+Variable	Value	Description
+AI_PROVIDER	demo / groq / gemini / openai	Choose your AI provider
+GROQ_API_KEY	your-key	FREE - Get at console.groq.com
+GEMINI_API_KEY	your-key	FREE - Get at aistudio.google.com
+OPENAI_API_KEY	your-key	Paid - Get at platform.openai.com
+Step 4: Update Frontend API URL
+After backend deploys, you'll get a URL like https://ai-writing-assistant-api.onrender.com
+Update frontend/src/environments/environment.prod.ts:
+export const environment = {  production: true,  apiUrl: 'https://ai-writing-assistant-api.onrender.com/api'  // Your actual backend URL};
+Then rebuild:
+git add .git commit -m "Update production API URL"git push
+Render will auto-redeploy the frontend.
+📋 Environment Variables Summary
+Variable	Required	Default	Description
+NODE_ENV	No	production	Environment mode
+PORT	No	3000	Server port (Render auto-sets this)
+AI_PROVIDER	No	demo	AI provider: demo, groq, gemini, openai
+GROQ_API_KEY	If using Groq	-	Groq API key
+GEMINI_API_KEY	If using Gemini	-	Google Gemini API key
+OPENAI_API_KEY	If using OpenAI	-	OpenAI API key
+💡 Recommendations
+Start with demo mode - Test deployment without API keys
+Use Groq (FREE) - Best free option with generous limits
+Free tier note - Render's free tier services spin down after 15 mins of inactivity (cold starts ~30-50 seconds)
+🔗 After Deployment, You'll Get:
+Backend URL: https://ai-writing-assistant-api.onrender.com
+Frontend URL: https://ai-writing-assistant-frontend.onrender.com
+Test backend health: https://ai-writing-assistant-api.onrender.com/api/health
