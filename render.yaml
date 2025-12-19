@@ -70,7 +70,6 @@ services:
   - type: web
     name: ai-writing-assistant-frontend
     runtime: static
-    region: oregon  # Should match backend region for lower latency
     plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build:prod
