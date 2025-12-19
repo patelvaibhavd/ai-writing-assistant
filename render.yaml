@@ -27,7 +27,7 @@ services:
       - key: AI_PROVIDER
         value: groq
 
-      # 🔐 Groq API key (loaded from Render ENV, NOT GitHub)
+      # Groq API Key (set in Render Dashboard)
       - key: GROQ_API_KEY
         sync: false
 
@@ -37,7 +37,6 @@ services:
   - type: web
     name: ai-writing-assistant-frontend
     runtime: static
-    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build:prod
     staticPublishPath: dist/ai-writing-assistant/browser
