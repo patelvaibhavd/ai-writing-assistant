@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api'
+  apiUrl: 'https://ai-writing-assistant-api-8l4o.onrender.com/api'
 };
 
